@@ -1,8 +1,5 @@
-<center>
-  <font size="6">
-    be05-4th-5team-Chicken-KnowGet
-  </font>
-</center>
+# be05-4th-5team-Chicken-KnowGet
+
 
 <p align="center">
   ✨ 백지환 서근엽 정유진 정민지 ✨
