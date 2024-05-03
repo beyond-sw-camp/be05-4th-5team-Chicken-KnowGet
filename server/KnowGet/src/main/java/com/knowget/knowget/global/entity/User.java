@@ -25,7 +25,7 @@ public class User {
 	@Column(name = "user_idx")
 	private Long idx;
 
-	@Column(name = "user_id", nullable = false, unique = true)
+	@Column(name = "id", nullable = false, unique = true)
 	private String id;
 
 	@Column(name = "name", nullable = false)
@@ -34,39 +34,25 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "phone", nullable = false, unique = true)
+	@Column(name = "phone", unique = true)
 	private String phone;
 
 	@Email
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "company", nullable = false)
-	private String company;
-
-	@Column(name = "department", nullable = false)
-	private String department;
-
 	@Column(name = "delete_yn")
 	@ColumnDefault("false")
 	private Boolean deleteYn;
 
-	@Column(name = "admin_yn")
-	@ColumnDefault("false")
-	private Boolean adminYn;
-
 	@Builder
-	public User(String id, String name, String password, String phone, String email, String company,
-		String department) {
+	public User(String id, String name, String password, String phone, String email) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
 		this.phone = phone;
 		this.email = email;
-		this.company = company;
-		this.department = department;
 		this.deleteYn = false;
-		this.adminYn = false;
 	}
 
 	public void updateDeleteYn() {

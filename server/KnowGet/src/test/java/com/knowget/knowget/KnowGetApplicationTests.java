@@ -16,6 +16,7 @@ class KnowGetApplicationTests {
 
 	@Autowired
 	private UserRepository userRepository;
+
 	@Autowired
 	private PostRepository postRepository;
 
@@ -27,8 +28,6 @@ class KnowGetApplicationTests {
 			.password("test")
 			.phone("test")
 			.email("test@test.com")
-			.company("test")
-			.department("test")
 			.build();
 		userRepository.save(user);
 
