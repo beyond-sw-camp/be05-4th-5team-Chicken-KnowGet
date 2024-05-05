@@ -64,7 +64,6 @@ public class UserService {
 			.email(userSignupDTO.getEmail())
 			.build();
 		userRepository.save(user);
-
 		return userSignupDTO.getId() + "님 가입을 환영합니다.";
 	}
 
