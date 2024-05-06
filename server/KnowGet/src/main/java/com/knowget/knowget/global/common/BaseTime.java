@@ -18,7 +18,7 @@ public abstract class BaseTime {
 
 	@CreatedDate    // 데이터 생성할 때 시간 자동 생성
 	@Column(name = "written_time")
-	private LocalDateTime createdTime;
+	private LocalDateTime writtenTime;
 
 	@LastModifiedDate   // 데이터 수정할 때 시간 자동 수정
 	@Column(name = "modified_time")
