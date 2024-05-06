@@ -27,12 +27,14 @@
       }
     },
     methods: {
-      login() {
-        // 로그인 로직 처리
-        this.$store.dispatch('login', { userId: this.userId, password: this.password });
-        this.$router.push('/qna');
-      }
-    }
+  login() {
+    this.$store.dispatch('login', {
+      userId: this.userId,
+      password: this.password
+    });
+  }
+}
+
   }
   </script>
   

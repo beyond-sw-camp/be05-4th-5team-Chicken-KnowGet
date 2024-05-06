@@ -1,4 +1,5 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
+import axios from 'axios';
 
 export default createStore({
   state: {
@@ -52,32 +53,58 @@ export default createStore({
     }
   },
   actions: {
+    login({ commit }, credentials) {
+      return axios.post('/user/signin', credentials)
+        .then(({ data }) => {
+          commit('authenticate', data);
+          return data;
+        });
+    },
+    logout({ commit }) {
+      commit('logout');
+    },
+    signUp({ commit }, userData) {
+      return axios.post('/user/signup', userData)
+        .then(response => {
+          commit('authenticate', response.data);
+          return response.data;
+        });
+    },
     fetchPosts({ commit }) {
-      // 여기에서 API를 통해 게시글을 가져오는 로직을 구현할 수 있습니다.
-      // 예시 데이터 로딩
-      commit('setPosts', [
-        // 게시글 예시 데이터
-      ]);
+      axios.get('/posts')
+        .then(response => {
+          commit('setPosts', response.data);
+        });
     },
     submitPost({ commit }, post) {
-      // API로 게시글을 추가하는 로직
-      commit('addPost', post);
+      axios.post('/posts', post)
+        .then(response => {
+          commit('addPost', response.data);
+        });
     },
     updatePostDetails({ commit }, post) {
-      // API로 게시글을 업데이트하는 로직
-      commit('updatePost', post);
+      axios.put(`/posts/${post.id}`, post)
+        .then(response => {
+          commit('updatePost', response.data);
+        });
     },
     removePost({ commit }, postId) {
-      // API로 게시글을 삭제하는 로직
-      commit('deletePost', postId);
+      axios.delete(`/posts/${postId}`)
+        .then(() => {
+          commit('deletePost', postId);
+        });
     },
     addNewComment({ commit }, { postId, comment }) {
-      // API로 댓글을 추가하는 로직
-      commit('addComment', { postId, comment });
+      axios.post(`/posts/${postId}/comments`, comment)
+        .then(() => {
+          commit('addComment', { postId, comment });
+        });
     },
     removeComment({ commit }, { postId, commentId }) {
-      // API로 댓글을 삭제하는 로직
-      commit('deleteComment', { postId, commentId });
+      axios.delete(`/posts/${postId}/comments/${commentId}`)
+        .then(() => {
+          commit('deleteComment', { postId, commentId });
+        });
     }
   },
   getters: {
@@ -87,4 +114,4 @@ export default createStore({
       return state.posts.slice(start, end);
     }
   }
-})
+});
