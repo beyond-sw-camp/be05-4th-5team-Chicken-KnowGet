@@ -15,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -27,23 +25,21 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-	private final String[] allowedUrls = {"/user/**", "/auth/**", "/post/**", "/comment", "/swagger-ui/**"};    // sign-up, sign-in, swagger-ui 추가
+	private final String[] allowedUrls = {"/user/**", "/auth/**", "/post/**", "/comment",
+		"/swagger-ui/**"};    // sign-up, sign-in, swagger-ui 추가
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http.securityContext((context) -> context.requireExplicitSave(false))
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-			.cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-				@Override
-				public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-					CorsConfiguration config = new CorsConfiguration();
-					config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
-					config.setAllowedMethods(Collections.singletonList("*"));
-					config.setAllowCredentials(true);
-					config.setAllowedHeaders(Collections.singletonList("*"));
-					config.setMaxAge(3600L);
-					return config;
-				}
+			.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
+				CorsConfiguration config = new CorsConfiguration();
+				config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
+				config.setAllowedMethods(Collections.singletonList("*"));
+				config.setAllowCredentials(true);
+				config.setAllowedHeaders(Collections.singletonList("*"));
+				config.setMaxAge(3600L);
+				return config;
 			}))
 			.csrf(CsrfConfigurer<HttpSecurity>::disable)
 			//.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
