@@ -6,7 +6,7 @@
     <div class="login-container">
       <h1>Login</h1>
       <form @submit.prevent="login">
-        <input type="text" v-model="userId" placeholder="아이디" required>
+        <input type="text" v-model="id" placeholder="아이디" required>
         <br>
         <input type="password" v-model="password" placeholder="패스워드" required>
         <br>
@@ -22,14 +22,14 @@
     name: "UserLogin",
     data() {
       return {
-        userId: '',
+        id: '',
         password: ''
       }
     },
     methods: {
   login() {
     this.$store.dispatch('login', {
-      userId: this.userId,
+      id: this.id,
       password: this.password
     });
   }

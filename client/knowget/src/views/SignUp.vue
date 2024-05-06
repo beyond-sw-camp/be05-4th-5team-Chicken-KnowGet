@@ -2,9 +2,9 @@
   <div class="signup-container">
     <h1>회원가입</h1>
     <form @submit.prevent="signUp">
-      <input type="text" v-model="userName" placeholder="이름" required>
+      <input type="text" v-model="name" placeholder="이름" required>
       <br>
-      <input type="text" v-model="userId" placeholder="ID" required>
+      <input type="text" v-model="id" placeholder="ID" required>
       <br>
       <input type="password" v-model="password" @input="validatePassword" placeholder="비밀번호" required>
       <div v-if="password && !validPassword">
@@ -26,8 +26,8 @@
 export default {
   data() {
     return {
-      userId: '',
-      userName: '',
+      id: '',
+      name: '',
       password: '',
       confirmPassword: '',
       email: '',
@@ -46,8 +46,8 @@ export default {
         return;
       }
       this.$store.dispatch('signUp', {
-        userId: this.userId,
-        name: this.userName,
+        id: this.id,
+        name: this.name,
         password: this.password,
         email: this.email,
         phone: this.phone
@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     canSubmit() {
-      return this.userId && this.userName && this.email && this.validPassword && this.password === this.confirmPassword;
+      return this.id && this.name && this.email && this.validPassword && this.password === this.confirmPassword;
     }
   }
 }
