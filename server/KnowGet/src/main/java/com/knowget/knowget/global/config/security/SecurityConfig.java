@@ -27,8 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-	private final String[] allowedUrls = {"/user/**", "/admin/**", "/h2-console/**",
-		"/swagger-ui/**"};    // sign-up, sign-in, swagger-ui 추가
+	private final String[] allowedUrls = {"/user/**", "/auth/**", "/post/**", "/comment", "/swagger-ui/**"};    // sign-up, sign-in, swagger-ui 추가
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

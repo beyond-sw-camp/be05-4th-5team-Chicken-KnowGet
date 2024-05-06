@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KnowGet.main.iml" filepath="$PROJECT_DIR$/.idea/modules/KnowGet.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/be05-4th-5team-Chicken-KnowGet.iml" filepath="$PROJECT_DIR$/.idea/be05-4th-5team-Chicken-KnowGet.iml" />
+    </modules>
+  </component>
+</project>
