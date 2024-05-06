@@ -33,7 +33,7 @@ public class Post extends BaseTime {
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_idx", nullable = false)
 	private User user;
 
@@ -46,6 +46,11 @@ public class Post extends BaseTime {
 		this.content = content;
 		this.user = user;
 		this.type = type;
+	}
+
+	public void update (String title, String content) {
+		this.title = title;
+		this.content = content;
 	}
 
 }
