@@ -4,6 +4,7 @@ package com.knowget.knowget.domain.post.service;
 import com.knowget.knowget.domain.post.dto.QnaRequestDTO;
 import com.knowget.knowget.domain.post.dto.QnaUpdateRequestDTO;
 import com.knowget.knowget.domain.post.exception.InvalidLoginException;
+import com.knowget.knowget.domain.post.exception.QnaNotFoundException;
 import com.knowget.knowget.domain.post.repository.PostRepository;
 import com.knowget.knowget.domain.user.repository.UserRepository;
 import com.knowget.knowget.global.entity.Post;
@@ -47,7 +48,7 @@ public class QnaService {
      * @return
      */
     @Transactional
-    public Post save(QnaRequestDTO qnaRequestDTO) {
+    public String save(QnaRequestDTO qnaRequestDTO) {
 
         Optional<User> user = userRepository.findByUserId(qnaRequestDTO.getId());
         if (user.isPresent()) {
@@ -57,7 +58,8 @@ public class QnaService {
                     .user(user.get())
                     .type(qnaRequestDTO.getType())
                     .build();
-            return postRepository.save(qna);
+                postRepository.save(qna);
+                return "게시글이 저장되었습니다.";
         }else {
             throw new InvalidLoginException("잘못된 로그인입니다.");
         }
@@ -69,9 +71,22 @@ public class QnaService {
      * @param qnaUpdateRequestDTO
      */
     @Transactional
-    public void update(Long id, QnaUpdateRequestDTO qnaUpdateRequestDTO) {
-        Post qna = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
+    public String update(Long id, QnaUpdateRequestDTO qnaUpdateRequestDTO) {
+        Post qna = postRepository.findById(id).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시물입니다."));
         qna.update(qnaUpdateRequestDTO.getTitle(), qnaUpdateRequestDTO.getContent());
+        return "게시글이 수정되었습니다.";
+    }
+
+    /**
+     * Q&A 삭제
+     * @param id
+     */
+    @Transactional
+    public String delete(Long id) {
+        postRepository.delete(
+                postRepository.findById(id)
+                        .orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시글입니다.")));
+        return "게시글이 삭제되었습니다.";
     }
 
 }

@@ -4,9 +4,12 @@ package com.knowget.knowget.domain.post.controller;
 import com.knowget.knowget.domain.post.dto.QnaRequestDTO;
 import com.knowget.knowget.domain.post.dto.QnaUpdateRequestDTO;
 import com.knowget.knowget.domain.post.exception.InvalidLoginException;
+import com.knowget.knowget.domain.post.exception.QnaNotFoundException;
 import com.knowget.knowget.domain.post.service.QnaService;
 import com.knowget.knowget.global.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +28,9 @@ public class QnaController {
      * @return
      */
     @GetMapping("/findall")
-    public List<Post> findAll() {
+    public ResponseEntity<List<Post>> findAll() {
         List<Post> postList = qnaService.findAll();
-        return postList;
+        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
     /**
@@ -36,18 +39,20 @@ public class QnaController {
      * @return
      */
     @GetMapping("/find/{id}")
-    public Post findById(@PathVariable Long id) {
-        return qnaService.findById(id);
+    public ResponseEntity<Post> findById(@PathVariable Long id) {
+        Post post = qnaService.findById(id);
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
     /**
      * Q&A 생성
      * @param
      */
-    @ExceptionHandler(InvalidLoginException.class)
+
     @PostMapping("/save")
-    public void save(@RequestBody QnaRequestDTO qnaRequestDTO) {
-        qnaService.save(qnaRequestDTO);
+    public ResponseEntity<String> save(@RequestBody QnaRequestDTO qnaRequestDTO) {
+        String msg = qnaService.save(qnaRequestDTO);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     /**
@@ -56,9 +61,32 @@ public class QnaController {
      * @param qnaUpdateRequestDTO
      */
     @PatchMapping("/update/{id}")
-    public void update(@PathVariable Long id, @RequestBody QnaUpdateRequestDTO qnaUpdateRequestDTO ) {
-        qnaService.update(id, qnaUpdateRequestDTO);
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody QnaUpdateRequestDTO qnaUpdateRequestDTO ) {
+        String msg = qnaService.update(id, qnaUpdateRequestDTO);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
+
+    /**
+     * Q&A 삭제
+     * @param id
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        String msg = qnaService.delete(id);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+
+    @ExceptionHandler(InvalidLoginException.class)
+    public ResponseEntity<String> handleInvalidLoginException(InvalidLoginException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(QnaNotFoundException.class)
+    public ResponseEntity<String> handleQnaNotFoundException(QnaNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
 
 
 }
