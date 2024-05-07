@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService {
 
 	//작성
 	@Override
-	public String createComment(Long postIdx, CommentRequestDto commentRequestDto) {
+	public String createComment(CommentRequestDto commentRequestDto) {
 		Optional<User> user = userRepository.findByUserId(commentRequestDto.getId());
-		Optional<Post> post = postRepository.findById(postIdx);
+		Optional<Post> post = postRepository.findById(commentRequestDto.getPostIdx());
 		String msg;
 
 		if (user.isEmpty()) {
@@ -69,29 +69,38 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto) {
 		Optional<Comment> comment = commentRepository.findById(commentIdx);
-		if (comment.get() == null) {
+		Optional<User> user = userRepository.findByUserId(commentUpdateDto.getId());
+
+		if (comment.isEmpty()) {
 			return "댓글이 존재하지 않습니다.";
-		} else {
-			Optional<User> user = userRepository.findByUserId(commentUpdateDto.getId());
-			if(!comment.get().getUser().getId().equals(user.get().getId())) {
-				return "권한이 없습니다.";
-			}else {
-				comment.get().updateContent(commentUpdateDto.getContent());
-				return "댓글이 수정되었습니다.";
-			}
+		} else if (user.isEmpty()) {
+			return "사용자가 존재하지 않습니다.";
 		}
+
+		if (!comment.get().getUser().getId().equals(user.get().getId())) {
+			return "로그인이 필요합니다.";
+		} else {
+			comment.get().updateContent(commentUpdateDto.getContent());
+			return "댓글이 수정되었습니다.";
+		}
+
 	}
+
 	//삭제
 	@Override
 	@Transactional
 	public String deleteComment(Long commentIdx, String userId) {
 		Optional<Comment> comment = commentRepository.findById(commentIdx);
-			if(!comment.get().getUser().getId().equals(userId)) {
-				return "권한이 없습니다.";
-			}else {
-				commentRepository.deleteById(commentIdx);
-				return "댓글이 삭제되었습니다.";
-			}
+		if (comment.isEmpty()) {
+			return "댓글이 존재하지 않습니다.";
+		}
+
+		if (!comment.get().getUser().getId().equals(userId)) {
+			return "로그인이 필요합니다.";
+		} else {
+			commentRepository.deleteById(commentIdx);
+			return "댓글이 삭제되었습니다.";
 		}
 	}
+}
 
