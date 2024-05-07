@@ -62,22 +62,26 @@ public class QnaController {
 
     /**
      * Q&A 수정
-     * @param id
+     * @param idx
      * @param qnaModifyRequestDTO
      */
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
-        String msg = qnaService.update(id, qnaModifyRequestDTO);
+    @PatchMapping("/update/{idx}")
+    public ResponseEntity<String> update(@PathVariable Long idx, @RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        qnaModifyRequestDTO.setId(id);
+        String msg = qnaService.update(idx, qnaModifyRequestDTO);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     /**
      * Q&A 삭제
-     * @param id
+     * @param idx
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id, @RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
-        String msg = qnaService.delete(id, qnaModifyRequestDTO);
+    public ResponseEntity<String> delete(@PathVariable Long idx, @RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        qnaModifyRequestDTO.setId(id);
+        String msg = qnaService.delete(idx, qnaModifyRequestDTO);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
