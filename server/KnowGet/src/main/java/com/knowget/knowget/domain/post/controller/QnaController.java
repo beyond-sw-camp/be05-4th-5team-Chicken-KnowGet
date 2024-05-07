@@ -10,6 +10,7 @@ import com.knowget.knowget.global.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +52,10 @@ public class QnaController {
 
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody QnaRequestDTO qnaRequestDTO) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        qnaRequestDTO.setId(id);
+        qnaRequestDTO.setType("qna");
+
         String msg = qnaService.save(qnaRequestDTO);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
