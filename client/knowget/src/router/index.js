@@ -13,7 +13,7 @@ const routes = [
   { path: '/qna/:postIdx', component: QnADetail, props: true, meta: { requiresAuth: true } }, // Changed ":id" to ":postIdx"
   { path: '/write', component: QnAWrite, meta: { requiresAuth: true } },
   { path: '/edit/:id', component: QnAWrite, props: true, meta: { requiresAuth: true } },
-  { path: '/login', redirect: '/' }
+  { path: '/login', redirect: '/' },
 ];
 
 const router = createRouter({

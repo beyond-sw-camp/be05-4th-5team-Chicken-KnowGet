@@ -26,7 +26,7 @@ public class QnaController {
 	/**
 	 * 최신순으로 Q&A 리스트 조회
 	 */
-	@PostMapping("/all")
+	@GetMapping("/all")
 	public ResponseEntity<List<Post>> findAll() {
 		List<Post> postList = qnaService.findAll();
 		return new ResponseEntity<>(postList, HttpStatus.OK);

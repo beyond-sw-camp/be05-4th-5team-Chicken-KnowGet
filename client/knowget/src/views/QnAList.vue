@@ -2,7 +2,7 @@
   <div class="qna-list">
     <h1>너겟에게 물어봐</h1>
     <input type="text" v-model="search" placeholder="질문 찾기">
-    <div class="post-container" v-for="post in filteredPosts" :key="post.id">
+    <div class="post-container" v-for="post in filteredPosts" :key="post.idx">
       <div class="post-left">
         <h3 @click="navigateToPost(post.idx)" class="post-title">{{ post.title }}</h3>
         <p>작성자: {{ post.user.name || '익명' }}</p>
