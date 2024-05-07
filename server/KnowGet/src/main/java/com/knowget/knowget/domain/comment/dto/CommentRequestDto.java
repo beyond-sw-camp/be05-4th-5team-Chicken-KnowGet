@@ -1,7 +1,5 @@
 package com.knowget.knowget.domain.comment.dto;
 
-import java.time.LocalDateTime;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
