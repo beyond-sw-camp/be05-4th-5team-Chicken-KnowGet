@@ -7,12 +7,15 @@ import com.knowget.knowget.domain.comment.dto.CommentUpdateDto;
 import com.knowget.knowget.global.entity.Comment;
 
 public interface CommentService {
-    //create
-    public String createComment(Long postIdx, CommentRequestDto commentRequestDto);
-    //read
-    public List<Comment> getComments(Long postIdx);
-    //update
-    public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto);
-    //delete
-    public String deleteComment(Long commentIdx, String userId);
+	//create
+	String createComment(CommentRequestDto commentRequestDto);
+
+	//read
+	List<Comment> getComments(Long postIdx);
+
+	//update
+	String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto);
+
+	//delete
+	String deleteComment(Long commentIdx, String userId);
 }
