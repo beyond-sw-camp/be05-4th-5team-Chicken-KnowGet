@@ -11,9 +11,13 @@
     <div class="comment-section">
       <h2>댓글</h2>
       <ul class="comment-list">
-        <li v-for="comment in comments" :key="comment.idx" class="comment-item">
+      <li v-for="comment in comments" :key="comment.idx" class="comment-item">
           <p class="comment-content">{{ comment.content }}</p>
-          <p class="comment-info">작성자: {{ comment.user.id || '익명' }}</p>
+          <div class="comment-actions">
+            <!-- Removed edit button -->
+            <button @click="deleteComment(comment.idx)">삭제</button>
+          </div>
+          <p class="comment-info">작성자: {{ comment.user?.id || '익명' }}</p>
           <p class="comment-info">작성 시간: {{ formatDateTime(comment.writtenTime) }}</p>
         </li>
       </ul>
@@ -28,49 +32,67 @@
   </div>
 </template>
 
+
+
 <script>
 import axios from 'axios';
+import { ref } from 'vue';
 
 export default {
   data() {
     return {
-      post: null,
-      comments: [],
-      newComment: ''
+      post: ref(null),
+      comments: ref([]),
+      newComment: ref('')
     };
   },
   methods: {
     fetchPost() {
       const postIdx = this.$route.params.postIdx;
       axios.post(`/qna/${postIdx}`)
-        .then(response => {
-          this.post = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching post:', error);
-        });
+          .then(response => {
+            this.post = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching post:', error);
+          });
     },
     fetchComments() {
       const postIdx = this.$route.params.postIdx;
       axios.post(`/qna/${postIdx}/comments`)
-        .then(response => {
-          this.comments = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching comments:', error);
-        });
+          .then(response => {
+            this.comments = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching comments:', error);
+          });
     },
     submitComment() {
       const postIdx = this.$route.params.postIdx;
+      if (!this.newComment.trim()) {
+        return;  // Prevents submitting empty comments
+      }
       axios.post(`/comment/create`, { content: this.newComment, postIdx: postIdx })
-        .then(response => {
-          this.comments.push(response.data);
-          this.newComment = ''; // Clear the input field after submitting comment
-        })
-        .catch(error => {
-          console.error('Error submitting comment:', error);
-        });
+          .then(response => {
+            const newComment = response.data;
+            this.comments.push(newComment); // Add the new comment to the list
+            this.newComment = ''; // Clear the model-bound input field
+          })
+          .catch(error => {
+            console.error('Error submitting comment:', error);
+          });
     },
+
+    deleteComment(idx) {
+      axios.delete(`/comment/delete/${idx}`)
+          .then(() => {
+            this.comments = this.comments.filter(c => c.idx !== idx); // Remove the comment from the list
+          })
+          .catch(error => {
+            console.error('Error deleting comment:', error);
+          });
+    },
+
     formatDateTime(dateTime) {
       if (!dateTime) return '날짜 정보 없음';
       const date = new Date(dateTime);
@@ -83,6 +105,11 @@ export default {
   }
 }
 </script>
+
+
+
+
+
 
 <style>
 .qna-detail {
