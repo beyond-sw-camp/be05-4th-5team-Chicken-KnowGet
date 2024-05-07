@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-	private final String[] allowedUrls = {"/user/**", "/auth/**", "/qna/**", "/comment/**",
+	private final String[] allowedUrls = {"/signup/**", "/login/**", "/user/**", "/auth/**", "/qna/**", "/comment/**",
 		"/swagger-ui/**"};    // sign-up, sign-in, swagger-ui 추가
 
 	@Bean
