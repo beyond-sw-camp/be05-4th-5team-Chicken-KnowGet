@@ -14,5 +14,5 @@ public interface CommentService {
     //update
     public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto);
     //delete
-    public String deleteComment(Long commentIdx);
+    public String deleteComment(Long commentIdx, String userId);
 }

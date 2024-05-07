@@ -69,24 +69,29 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto) {
 		Optional<Comment> comment = commentRepository.findById(commentIdx);
-		if (comment.isEmpty()) {
+		if (comment.get() == null) {
 			return "댓글이 존재하지 않습니다.";
 		} else {
-			comment.get().updateContent(commentUpdateDto.getContent());
-			return "댓글이 수정되었습니다.";
+			Optional<User> user = userRepository.findByUserId(commentUpdateDto.getId());
+			if(!comment.get().getUser().getId().equals(user.get().getId())) {
+				return "권한이 없습니다.";
+			}else {
+				comment.get().updateContent(commentUpdateDto.getContent());
+				return "댓글이 수정되었습니다.";
+			}
 		}
 	}
-
 	//삭제
 	@Override
 	@Transactional
-	public String deleteComment(Long commentIdx) {
+	public String deleteComment(Long commentIdx, String userId) {
 		Optional<Comment> comment = commentRepository.findById(commentIdx);
-		if (comment.isEmpty()) {
-			return "댓글이 존재하지 않습니다.";
-		} else {
-			commentRepository.deleteById(commentIdx);
-			return "댓글이 삭제되었습니다.";
+			if(!comment.get().getUser().getId().equals(userId)) {
+				return "권한이 없습니다.";
+			}else {
+				commentRepository.deleteById(commentIdx);
+				return "댓글이 삭제되었습니다.";
+			}
 		}
 	}
-}
+

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,10 @@ public class CommentController {
 		if (commentRequestDto.getContent() == null || commentRequestDto.getContent().isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        commentRequestDto.setId(userId);
+
 		String msg = commentService.createComment(id, commentRequestDto);
 		return new ResponseEntity<>(msg, HttpStatus.CREATED);
 	}
@@ -47,6 +52,8 @@ public class CommentController {
 	@PutMapping("/qna/{id}/update/{commentIdx}")
 	public ResponseEntity<String> updateComment(@PathVariable("commentIdx") Long commentIdx,
 		@RequestBody CommentUpdateDto commentUpdateDto) {
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		commentUpdateDto.setId(userId);
 		String msg = commentService.updateComment(commentIdx, commentUpdateDto);
 		return new ResponseEntity<>(msg, HttpStatus.OK);
 	}
@@ -54,7 +61,9 @@ public class CommentController {
 	//삭제
 	@DeleteMapping("/qna/{id}/delete/{commentIdx}")
 	public ResponseEntity<String> deleteComment(@PathVariable("commentIdx") Long commentIdx) {
-		String msg = commentService.deleteComment(commentIdx);
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		String msg = commentService.deleteComment(commentIdx, userId);
 		return new ResponseEntity<>(msg, HttpStatus.OK);
 	}
 }

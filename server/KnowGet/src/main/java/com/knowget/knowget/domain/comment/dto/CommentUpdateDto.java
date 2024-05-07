@@ -6,5 +6,7 @@ import lombok.Data;
 @Data
 public class CommentUpdateDto {
     @NotNull
+    private String id;
+    @NotNull
     private String content;
 }
