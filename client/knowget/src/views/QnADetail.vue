@@ -42,31 +42,34 @@ export default {
   methods: {
     fetchPost() {
       const postIdx = this.$route.params.postIdx;
-      axios.get(`/qna/${postIdx}`)
-          .then(response => {
-            this.post = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching post:', error);
-          });
+      axios.post(`/qna/${postIdx}`)
+        .then(response => {
+          this.post = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching post:', error);
+        });
+    },
+    fetchComments() {
+      const postIdx = this.$route.params.postIdx;
       axios.post(`/qna/${postIdx}/comments`)
-          .then(response => {
-            this.comments = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching comments:', error);
-          });
+        .then(response => {
+          this.comments = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching comments:', error);
+        });
     },
     submitComment() {
       const postIdx = this.$route.params.postIdx;
-      axios.post(`/comment/create`, { content: this.newComment , postIdx : postIdx })
-          .then(response => {
-            this.comments.push(response.data);
-            this.newComment = ''; // Clear the input field after submitting comment
-          })
-          .catch(error => {
-            console.error('Error submitting comment:', error);
-          });
+      axios.post(`/comment/create`, { content: this.newComment, postIdx: postIdx })
+        .then(response => {
+          this.comments.push(response.data);
+          this.newComment = ''; // Clear the input field after submitting comment
+        })
+        .catch(error => {
+          console.error('Error submitting comment:', error);
+        });
     },
     formatDateTime(dateTime) {
       if (!dateTime) return '날짜 정보 없음';
@@ -76,6 +79,7 @@ export default {
   },
   created() {
     this.fetchPost();
+    this.fetchComments();
   }
 }
 </script>
