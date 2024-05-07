@@ -22,9 +22,11 @@ export default {
   },
   methods: {
     async submitPost() {
+      const now = new Date(); // 현재 시간 생성
       const post = {
         title: this.title,
-        content: this.content
+        content: this.content,
+        createdAt: now.toISOString() // ISO 문자열로 작성 시간 설정
       };
       try {
         const url = this.isEdit ? `/qna/update/${this.$route.params.id}` : '/qna/save';

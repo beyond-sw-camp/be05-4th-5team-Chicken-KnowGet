@@ -4,13 +4,14 @@
     <input type="text" v-model="search" placeholder="질문 찾기">
     <div class="post-container" v-for="post in filteredPosts" :key="post.id">
       <div class="post-left">
+        <!-- 여기에 클릭 이벤트를 추가합니다 -->
         <h3 @click="navigateToPost(post.id)" class="post-title">{{ post.title }}</h3>
-        <p>작성자 : {{ post.author }}</p>
+        <p>작성자: {{ post.user.name || '익명' }}</p>
       </div>
       <div class="post-right">
-        <p>{{ post.date }}</p>
+        <p>작성 시간: {{ formatDateTime(post.createdAt) }}</p>
         <p>조회 수: {{ post.views }}</p>
-        <p>답변 수: {{ post.comments.length }}</p>
+        <p>답변 수: {{ post.comments?.length || 0 }}</p>
       </div>
     </div>
     <div class="pagination">
@@ -46,9 +47,16 @@ export default {
     setPage(page) {
       this.currentPage = page;
     },
-    navigateToPost(postId) {
-      this.$router.push(`/qna/${postId}`);
-    },
+    async navigateToPost(postId) {
+      console.log('Post ID:', postId);  // 디버깅을 위해 postId 출력
+      try {
+        await axios.post(`/qna/increase-views/${postId}`);
+        this.$router.push(`/qna/${postId}`);
+      } catch (error) {
+        console.error('Error navigating to post:', error);
+      }
+    }
+    ,
     async fetchPosts() {
       try {
         const response = await axios.get('/qna/findall');
@@ -56,6 +64,11 @@ export default {
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
+    },
+    formatDateTime(dateTime) {
+      if (!dateTime) return '날짜 정보 없음';
+      const date = new Date(dateTime);
+      return date.toLocaleString();
     }
   },
   created() {
@@ -63,7 +76,6 @@ export default {
   }
 }
 </script>
-
 
 <style>
 .qna-list {

@@ -4,7 +4,7 @@
       <router-link to="/qna">HOME</router-link> |
       <router-link to="/about">About</router-link>
       <div v-if="user" class="user-info">
-        {{ user.name }} 회원님 환영합니다. |
+        {{ user.id }} 회원님 환영합니다. |
         <button @click="logout">로그아웃</button>
       </div>
       <div v-else>

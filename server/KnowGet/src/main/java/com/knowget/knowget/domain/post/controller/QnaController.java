@@ -39,7 +39,7 @@ public class QnaController {
      * @param id
      * @return
      */
-    @GetMapping("/find/{id}")
+    @PostMapping("/find/{id}")
     public ResponseEntity<Post> findById(@PathVariable Long id) {
         Post post = qnaService.findById(id);
         return new ResponseEntity<>(post, HttpStatus.OK);

@@ -13,7 +13,7 @@ const routes = [
   { path: '/qna/:id', component: QnADetail, meta: { requiresAuth: true } },
   { path: '/write', component: QnAWrite, meta: { requiresAuth: true } },
   { path: '/edit/:id', component: QnAWrite, meta: { requiresAuth: true } },
-  { path: '/login', redirect: '/' }  // Home 경로를 로그인 페이지로 리다이렉트
+  { path: '/login', redirect: '/' } , // Home 경로를 로그인 페이지로 리다이렉트
 ]
 
 const router = createRouter({
