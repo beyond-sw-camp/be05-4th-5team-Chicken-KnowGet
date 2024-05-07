@@ -72,10 +72,11 @@ export default createStore({
             console.error('Error fetching posts:', error);
           });
     },
-    signUp({ commit }, userData) {
+
+    signUp(_, userData) { // Use an underscore or remove the parameter if not using `commit`
       return axios.post('/user/signup', userData)
           .then(response => {
-            commit('authenticate', response.data);
+            // No commit here since we are not logging the user in automatically
             return response.data;
           });
     },
