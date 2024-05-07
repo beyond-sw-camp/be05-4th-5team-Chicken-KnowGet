@@ -83,9 +83,9 @@ public class QnaService {
 	 * Q&A 삭제
 	 */
 	@Transactional
-	public String delete(Long postIdx, QnaModifyRequestDTO qnaModifyRequestDTO) {
+	public String delete(Long postIdx, String userId) {
 		Post post = postRepository.findById(postIdx).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시글입니다."));
-		Optional<User> user = userRepository.findByUserId(qnaModifyRequestDTO.getId());
+		Optional<User> user = userRepository.findByUserId(userId);
 		if (user.isPresent()) {
 			if (post.getUser().equals(user.get())) {
 				postRepository.delete(post);

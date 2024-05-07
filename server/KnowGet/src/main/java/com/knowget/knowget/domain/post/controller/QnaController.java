@@ -78,11 +78,9 @@ public class QnaController {
 	 * Q&A 삭제
 	 */
 	@DeleteMapping("/{postIdx}/delete")
-	public ResponseEntity<String> delete(@PathVariable("postIdx") Long postIdx,
-		@RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
+	public ResponseEntity<String> delete(@PathVariable("postIdx") Long postIdx) {
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-		qnaModifyRequestDTO.setId(userId);
-		String msg = qnaService.delete(postIdx, qnaModifyRequestDTO);
+		String msg = qnaService.delete(postIdx, userId);
 		return new ResponseEntity<>(msg, HttpStatus.OK);
 	}
 
