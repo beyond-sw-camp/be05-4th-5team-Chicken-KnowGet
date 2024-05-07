@@ -89,18 +89,27 @@ public class CommentServiceImpl implements CommentService {
 	//삭제
 	@Override
 	@Transactional
+//	public String deleteComment(Long commentIdx, String userId) {
+//		Optional<Comment> comment = commentRepository.findById(commentIdx);
+//		if (comment.isEmpty()) {
+//			return "댓글이 존재하지 않습니다.";
+//		}
+//
+//		if (!comment.get().getUser().getId().equals(userId)) {
+//			return "로그인이 필요합니다.";
+//		} else {
+//			commentRepository.deleteById(commentIdx);
+//			return "댓글이 삭제되었습니다.";
+//		}
+//	}
 	public String deleteComment(Long commentIdx, String userId) {
-		Optional<Comment> comment = commentRepository.findById(commentIdx);
-		if (comment.isEmpty()) {
-			return "댓글이 존재하지 않습니다.";
-		}
-
-		if (!comment.get().getUser().getId().equals(userId)) {
-			return "로그인이 필요합니다.";
-		} else {
+		if (commentRepository.existsById(commentIdx)) {
 			commentRepository.deleteById(commentIdx);
-			return "댓글이 삭제되었습니다.";
+			return "Comment deleted successfully";
+		} else {
+			return "Comment not found";
 		}
 	}
+
 }
 

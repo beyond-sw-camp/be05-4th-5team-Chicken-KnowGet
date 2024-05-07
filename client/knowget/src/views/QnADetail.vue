@@ -11,14 +11,15 @@
     <div class="comment-section">
       <h2>댓글</h2>
       <ul class="comment-list">
-      <li v-for="comment in comments" :key="comment.idx" class="comment-item">
-          <p class="comment-content">{{ comment.content }}</p>
-          <div class="comment-actions">
-            <!-- Removed edit button -->
+        <li v-for="comment in comments" :key="comment.idx" class="comment-item">
+          <p class="comment-info">작성자: {{ comment.user?.id || '익명' }}</p>
+          <div class="comment-main">
+            <p class="comment-content">{{ comment.content }}</p>
+          </div>
+          <div class="comment-details">
+            <p class="comment-info">작성 시간: {{ formatDateTime(comment.writtenTime) }}</p>
             <button @click="deleteComment(comment.idx)">삭제</button>
           </div>
-          <p class="comment-info">작성자: {{ comment.user?.id || '익명' }}</p>
-          <p class="comment-info">작성 시간: {{ formatDateTime(comment.writtenTime) }}</p>
         </li>
       </ul>
       <form @submit.prevent="submitComment" class="comment-form">
@@ -34,16 +35,16 @@
 
 
 
+
 <script>
 import axios from 'axios';
-import { ref } from 'vue';
 
 export default {
   data() {
     return {
-      post: ref(null),
-      comments: ref([]),
-      newComment: ref('')
+      post: null,
+      comments: [],
+      newComment: ''
     };
   },
   methods: {
@@ -70,29 +71,36 @@ export default {
     submitComment() {
       const postIdx = this.$route.params.postIdx;
       if (!this.newComment.trim()) {
-        return;  // Prevents submitting empty comments
+        alert("댓글을 입력해주세요."); // Alert the user to enter some text
+        return; // Prevent submitting empty comments
       }
       axios.post(`/comment/create`, { content: this.newComment, postIdx: postIdx })
           .then(response => {
-            const newComment = response.data;
-            this.comments.push(newComment); // Add the new comment to the list
-            this.newComment = ''; // Clear the model-bound input field
+            if (response.data === "댓글이 작성되었습니다.") {
+              this.fetchComments(); // Fetch all comments again to refresh the list
+              this.newComment = ''; // Clear the textarea after successful submission
+            } else {
+              console.error('Unexpected response:', response.data);
+            }
           })
           .catch(error => {
             console.error('Error submitting comment:', error);
           });
-    },
+    }
 
+
+    ,
     deleteComment(idx) {
       axios.delete(`/comment/delete/${idx}`)
           .then(() => {
-            this.comments = this.comments.filter(c => c.idx !== idx); // Remove the comment from the list
+            this.comments = this.comments.filter(c => c.idx !== idx);
           })
           .catch(error => {
             console.error('Error deleting comment:', error);
           });
-    },
+    }
 
+    ,
     formatDateTime(dateTime) {
       if (!dateTime) return '날짜 정보 없음';
       const date = new Date(dateTime);
@@ -105,7 +113,6 @@ export default {
   }
 }
 </script>
-
 
 
 
@@ -156,20 +163,29 @@ export default {
 }
 
 .comment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Align items vertically */
   margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
 }
 
-.comment-content {
-  font-size: 16px;
+.comment-main {
+  flex: 2;
+}
+
+.comment-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .comment-info {
   font-size: 14px;
   color: gray;
-}
-
-.comment-form {
-  margin-top: 20px;
+  margin-right: 10px; /* Add space between author and content */
 }
 
 .comment-form textarea {
@@ -189,5 +205,20 @@ export default {
 
 .comment-form button:hover {
   background-color: #0056b3;
+}
+
+.comment-details button {
+  padding: 4px 8px;
+  background-color: #ff4081;
+  color: white;
+  font-size: 12px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.comment-details button:hover {
+  background-color: #f50057;
 }
 </style>
