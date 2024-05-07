@@ -71,13 +71,13 @@ public class QnaService {
 	/**
 	 * Q&A 수정
 	 *
-	 * @param id
+	 * @param idx
 	 * @param qnaModifyRequestDTO
 	 */
 	@Transactional
-	public String update(Long id, QnaModifyRequestDTO qnaModifyRequestDTO) {
+	public String update(Long idx, QnaModifyRequestDTO qnaModifyRequestDTO) {
 		Optional<User> user = userRepository.findByUserId(qnaModifyRequestDTO.getId());
-		Post qna = postRepository.findById(id).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시물입니다."));
+		Post qna = postRepository.findById(idx).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시물입니다."));
 		if (user.isPresent()) {
 			if(qna.getUser().equals(user.get())) {
 				qna.update(qnaModifyRequestDTO.getTitle(), qnaModifyRequestDTO.getContent());
@@ -96,11 +96,11 @@ public class QnaService {
 	/**
 	 * Q&A 삭제
 	 *
-	 * @param id
+	 * @param idx
 	 */
 	@Transactional
-	public String delete(Long id, QnaModifyRequestDTO qnaModifyRequestDTO) {
-		Post qna = postRepository.findById(id).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시글입니다."));
+	public String delete(Long idx, QnaModifyRequestDTO qnaModifyRequestDTO) {
+		Post qna = postRepository.findById(idx).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시글입니다."));
 		Optional<User> user = userRepository.findByUserId(qnaModifyRequestDTO.getId());
 		if (user.isPresent()) {
 			if(qna.getUser().equals(user.get())) {
