@@ -1,5 +1,3 @@
-// store/index.js
-
 import { createStore } from 'vuex';
 import axios from 'axios';
 
@@ -66,7 +64,7 @@ export default createStore({
       commit('logout');
     },
     fetchPosts({ commit }) {
-      axios.get('/qna/findall')
+      axios.get('/qna/all')
           .then(response => {
             commit('setPosts', response.data);
           })
