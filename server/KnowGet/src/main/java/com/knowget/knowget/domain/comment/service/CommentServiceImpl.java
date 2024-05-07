@@ -68,12 +68,12 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	@Transactional
 	public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto) {
-		try {
-			commentRepository.updateComment(commentIdx, commentUpdateDto.getContent());
+		Optional<Comment> comment = commentRepository.findById(commentIdx);
+		if (comment.isEmpty()) {
+			return "댓글이 존재하지 않습니다.";
+		} else {
+			comment.get().updateContent(commentUpdateDto.getContent());
 			return "댓글이 수정되었습니다.";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "댓글 수정에 실패했습니다.";
 		}
 	}
 
@@ -81,12 +81,12 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	@Transactional
 	public String deleteComment(Long commentIdx) {
-		try {
+		Optional<Comment> comment = commentRepository.findById(commentIdx);
+		if (comment.isEmpty()) {
+			return "댓글이 존재하지 않습니다.";
+		} else {
 			commentRepository.deleteById(commentIdx);
 			return "댓글이 삭제되었습니다.";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "댓글 삭제에 실패했습니다.";
 		}
 	}
 }
