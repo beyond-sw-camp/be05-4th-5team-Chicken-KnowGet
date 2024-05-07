@@ -72,6 +72,13 @@ export default createStore({
             console.error('Error fetching posts:', error);
           });
     },
+    signUp({ commit }, userData) {
+      return axios.post('/user/signup', userData)
+          .then(response => {
+            commit('authenticate', response.data);
+            return response.data;
+          });
+    },
     submitPost({ commit }, post) {
       return axios.post('/qna/save', post)
           .then(response => {

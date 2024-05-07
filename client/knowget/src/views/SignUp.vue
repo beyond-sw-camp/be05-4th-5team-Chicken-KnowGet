@@ -45,17 +45,20 @@ export default {
         alert('비밀번호가 일치하지 않습니다.');
         return;
       }
-      this.$store.dispatch('signUp', {
+      const userData = {
         id: this.id,
         name: this.name,
         password: this.password,
         email: this.email,
         phone: this.phone
-      }).then(() => {
-        this.$router.push('/');
-      }).catch(error => {
-        alert('회원가입 실패: ' + error.message);
-      });
+      };
+      this.$store.dispatch('signUp', userData)
+          .then(() => {
+            this.$router.push('/');  //성공 시 로그인 창으로~
+          })
+          .catch(error => {
+            alert('회원가입 실패: ' + error.message);
+          });
     }
   },
   computed: {
@@ -65,6 +68,8 @@ export default {
   }
 }
 </script>
+
+
 
 <style>
 .signup-container {
