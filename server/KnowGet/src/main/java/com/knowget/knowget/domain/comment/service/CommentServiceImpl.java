@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.knowget.knowget.domain.comment.dto.CommentRequestDto;
 import com.knowget.knowget.domain.comment.dto.CommentUpdateDto;
@@ -18,70 +19,74 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService{
-    
-    private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
+public class CommentServiceImpl implements CommentService {
 
-    //작성
-    @Override
-    public String createComment(Long postIdx, CommentRequestDto commentRequestDto) {
-        Optional<User> user = userRepository.findByUserId(commentRequestDto.getId());
-        Optional<Post> post = postRepository.findById(postIdx);
-        String msg = "";
+	private final CommentRepository commentRepository;
+	private final UserRepository userRepository;
+	private final PostRepository postRepository;
 
-        if(user.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
-        }
-        Comment comment = Comment.builder()
-            .post(post.get())
-            .user(user.get())
-            .content(commentRequestDto.getContent())
-            .build();
-        Comment result = commentRepository.save(comment);
+	//작성
+	@Override
+	public String createComment(Long postIdx, CommentRequestDto commentRequestDto) {
+		Optional<User> user = userRepository.findByUserId(commentRequestDto.getId());
+		Optional<Post> post = postRepository.findById(postIdx);
+		String msg;
 
-        if (result == null) {
-            msg = "댓글이 작성되지 않았습니다.";
-        }
-        else {
-            msg = "댓글이 작성되었습니다.";
-        }
+		if (user.isEmpty()) {
+			throw new IllegalArgumentException("User not found");
+		}
 
-        return msg;
-    }
+		if (post.isEmpty()) {
+			throw new IllegalArgumentException("Post not found");
+		}
 
-    //모든 댓글 조회
-    @Override
-    public List<Comment> getComments(Long postIdx) {
-        Optional<List<Comment>> comments = commentRepository.findByPostIdx(postIdx);
-        if (comments.isEmpty()) {
-            return null;
-        }
-        return comments.get();
-    }
+		try {
+			Comment comment = Comment.builder()
+				.post(post.get())
+				.user(user.get())
+				.content(commentRequestDto.getContent())
+				.build();
+			commentRepository.save(comment);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "댓글 작성에 실패했습니다.";
+		}
 
-    //수정
-    @Override
-    public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto) {
-        try{
-            commentRepository.updateComment(commentIdx, commentUpdateDto.getContent());
-            return "댓글이 수정되었습니다.";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "댓글 수정에 실패했습니다.";
-        }
-    }
-    
-    //삭제
-    @Override
-    public String deleteComment(Long commentIdx) {
-        try {
-            commentRepository.deleteById(commentIdx);
-            return "댓글이 삭제되었습니다.";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "댓글 삭제에 실패했습니다.";
-        }
-    }
+		msg = "댓글이 작성되었습니다.";
+		return msg;
+	}
+
+	//모든 댓글 조회
+	@Override
+	@Transactional(readOnly = true)
+	public List<Comment> getComments(Long postIdx) {
+		Optional<List<Comment>> comments = commentRepository.findByPostIdx(postIdx);
+		return comments.orElse(null);
+	}
+
+	//수정
+	@Override
+	@Transactional
+	public String updateComment(Long commentIdx, CommentUpdateDto commentUpdateDto) {
+		try {
+			commentRepository.updateComment(commentIdx, commentUpdateDto.getContent());
+			return "댓글이 수정되었습니다.";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "댓글 수정에 실패했습니다.";
+		}
+	}
+
+	//삭제
+	@Override
+	@Transactional
+	public String deleteComment(Long commentIdx) {
+		try {
+			commentRepository.deleteById(commentIdx);
+			return "댓글이 삭제되었습니다.";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "댓글 삭제에 실패했습니다.";
+		}
+	}
 }
