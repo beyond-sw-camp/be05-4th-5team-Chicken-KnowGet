@@ -3,7 +3,7 @@ package com.knowget.knowget.domain.comment.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.knowget.knowget.domain.comment.dto.CommentRequestDto;
 import com.knowget.knowget.domain.comment.dto.CommentUpdateDto;
@@ -14,18 +14,15 @@ import com.knowget.knowget.global.entity.Comment;
 import com.knowget.knowget.global.entity.Post;
 import com.knowget.knowget.global.entity.User;
 
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService{
     
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-
-    @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository) {
-        this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-    }
 
     //작성
     @Override
