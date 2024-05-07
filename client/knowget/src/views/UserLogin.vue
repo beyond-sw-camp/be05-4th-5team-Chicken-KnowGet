@@ -1,3 +1,4 @@
+<!-- UserLogin.vue -->
 <template>
   <div class="knowget">
     <h1>KnowGet</h1>
@@ -14,39 +15,37 @@
       </form>
       <button @click="$router.push('/signup')">회원가입</button>
     </div>
-    </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-  export default {
-    name: "UserLogin",
-    data() {
-      return {
-        id: '',
-        password: ''
-      }
-    },
-    methods: {
-      login() {
-        this.$store.dispatch('login', {
-          id: this.id,
-          password: this.password
-        }).then(() => {
-          // 로그인 성공 후 QnA 페이지로 리다이렉트
-          this.$router.push('/qna');
-        }).catch((error) => {
-          // 로그인 실패 시 에러 처리
-          console.error("Login failed:", error);
-          alert("로그인 실패: 아이디 또는 패스워드를 확인하세요.");
-        });
-      }
+<script>
+export default {
+  name: "UserLogin",
+  data() {
+    return {
+      id: '',
+      password: ''
     }
-
-
+  },
+  methods: {
+    login() {
+      this.$store.dispatch('login', {
+        id: this.id,
+        password: this.password
+      }).then(() => {
+        // 로그인 성공 시 페이지 이동
+        this.$router.push('/qna');
+      }).catch((error) => {
+        console.error("Login failed:", error);
+        alert("로그인 실패: 아이디 또는 패스워드를 확인하세요.");
+      });
+    }
   }
-  </script>
-  
-  <style>
+}
+</script>
+
+
+<style>
   .login-container {
     display: flex;
     flex-direction: column;

@@ -1,3 +1,5 @@
+// store/index.js
+
 import { createStore } from 'vuex';
 import axios from 'axios';
 
@@ -13,10 +15,14 @@ export default createStore({
     authenticate(state, user) {
       state.isAuthenticated = true;
       state.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', user.token); // 토큰 저장
     },
     logout(state) {
       state.isAuthenticated = false;
       state.user = null;
+      localStorage.removeItem('user');
+      localStorage.removeItem('token'); // 토큰 삭제
     },
     setPosts(state, posts) {
       state.posts = posts;
@@ -33,85 +39,51 @@ export default createStore({
     deletePost(state, postId) {
       state.posts = state.posts.filter(post => post.id !== postId);
     },
-    addComment(state, { postId, comment }) {
-      const post = state.posts.find(post => post.id === postId);
-      if (post) {
-        post.comments.push(comment);
-      }
-    },
-    deleteComment(state, { postId, commentId }) {
-      const post = state.posts.find(post => post.id === postId);
-      if (post) {
-        const index = post.comments.findIndex(comment => comment.id === commentId);
-        if (index !== -1) {
-          post.comments.splice(index, 1);
-        }
-      }
-    },
     setPage(state, page) {
       state.currentPage = page;
     }
   },
   actions: {
+    checkLogin({ commit }) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        try {
+          const parsedUser = JSON.parse(user);
+          commit('authenticate', parsedUser);
+        } catch (e) {
+          console.error("Failed to parse user data:", e);
+        }
+      }
+    },
     login({ commit }, credentials) {
       return axios.post('/user/signin', credentials)
-        .then(({ data }) => {
-          commit('authenticate', data);
-          return data;
-        });
+          .then(({ data }) => {
+            commit('authenticate', data);
+            return data;
+          });
     },
     logout({ commit }) {
       commit('logout');
     },
-    signUp({ commit }, userData) {
-      return axios.post('/user/signup', userData)
-        .then(response => {
-          commit('authenticate', response.data);
-          return response.data;
-        });
-    },
     fetchPosts({ commit }) {
-      axios.get('/posts')
-        .then(response => {
-          commit('setPosts', response.data);
-        });
+      axios.get('/qna/findall')
+          .then(response => {
+            commit('setPosts', response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching posts:', error);
+          });
     },
     submitPost({ commit }, post) {
-      axios.post('/posts', post)
-        .then(response => {
-          commit('addPost', response.data);
-        });
-    },
-    updatePostDetails({ commit }, post) {
-      axios.put(`/posts/${post.id}`, post)
-        .then(response => {
-          commit('updatePost', response.data);
-        });
-    },
-    removePost({ commit }, postId) {
-      axios.delete(`/posts/${postId}`)
-        .then(() => {
-          commit('deletePost', postId);
-        });
-    },
-    addNewComment({ commit }, { postId, comment }) {
-      axios.post(`/posts/${postId}/comments`, comment)
-        .then(() => {
-          commit('addComment', { postId, comment });
-        });
-    },
-    removeComment({ commit }, { postId, commentId }) {
-      axios.delete(`/posts/${postId}/comments/${commentId}`)
-        .then(() => {
-          commit('deleteComment', { postId, commentId });
-        });
-    }
-  },
-  getters: {
-    paginatedPosts: state => {
-      const start = (state.currentPage - 1) * state.postsPerPage;
-      const end = start + state.postsPerPage;
-      return state.posts.slice(start, end);
+      return axios.post('/qna/save', post)
+          .then(response => {
+            commit('addPost', response.data);
+            return response.data;
+          })
+          .catch(error => {
+            console.error('Error submitting post:', error);
+            throw error;
+          });
     }
   }
 });
