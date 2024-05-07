@@ -2,7 +2,7 @@ package com.knowget.knowget.domain.post.controller;
 
 
 import com.knowget.knowget.domain.post.dto.QnaRequestDTO;
-import com.knowget.knowget.domain.post.dto.QnaUpdateRequestDTO;
+import com.knowget.knowget.domain.post.dto.QnaModifyRequestDTO;
 import com.knowget.knowget.domain.post.exception.InvalidLoginException;
 import com.knowget.knowget.domain.post.exception.QnaNotFoundException;
 import com.knowget.knowget.domain.post.service.QnaService;
@@ -58,11 +58,11 @@ public class QnaController {
     /**
      * Q&A 수정
      * @param id
-     * @param qnaUpdateRequestDTO
+     * @param qnaModifyRequestDTO
      */
     @PatchMapping("/update/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody QnaUpdateRequestDTO qnaUpdateRequestDTO ) {
-        String msg = qnaService.update(id, qnaUpdateRequestDTO);
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
+        String msg = qnaService.update(id, qnaModifyRequestDTO);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
@@ -71,8 +71,8 @@ public class QnaController {
      * @param id
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        String msg = qnaService.delete(id);
+    public ResponseEntity<String> delete(@PathVariable Long id, @RequestBody QnaModifyRequestDTO qnaModifyRequestDTO) {
+        String msg = qnaService.delete(id, qnaModifyRequestDTO);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
