@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.knowget.knowget.domain.post.dto.QnaRequestDTO;
-import com.knowget.knowget.domain.post.dto.QnaUpdateRequestDTO;
+import com.knowget.knowget.domain.post.dto.QnaModifyRequestDTO;
 import com.knowget.knowget.domain.post.exception.InvalidLoginException;
 import com.knowget.knowget.domain.post.exception.QnaNotFoundException;
 import com.knowget.knowget.domain.post.repository.PostRepository;
@@ -72,13 +72,25 @@ public class QnaService {
 	 * Q&A 수정
 	 *
 	 * @param id
-	 * @param qnaUpdateRequestDTO
+	 * @param qnaModifyRequestDTO
 	 */
 	@Transactional
-	public String update(Long id, QnaUpdateRequestDTO qnaUpdateRequestDTO) {
+	public String update(Long id, QnaModifyRequestDTO qnaModifyRequestDTO) {
+		Optional<User> user = userRepository.findByUserId(qnaModifyRequestDTO.getId());
 		Post qna = postRepository.findById(id).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시물입니다."));
-		qna.update(qnaUpdateRequestDTO.getTitle(), qnaUpdateRequestDTO.getContent());
-		return "게시글이 수정되었습니다.";
+		if (user.isPresent()) {
+			if(qna.getUser().equals(user.get())) {
+				qna.update(qnaModifyRequestDTO.getTitle(), qnaModifyRequestDTO.getContent());
+				return "게시글이 수정되었습니다.";
+			}else {
+				throw new InvalidLoginException("로그인 후 이용해주세요.");
+			}
+		} else {
+			throw new InvalidLoginException("로그인 후 이용해주세요.");
+		}
+
+
+
 	}
 
 	/**
@@ -87,11 +99,21 @@ public class QnaService {
 	 * @param id
 	 */
 	@Transactional
-	public String delete(Long id) {
-		postRepository.delete(
-			postRepository.findById(id)
-				.orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시글입니다.")));
-		return "게시글이 삭제되었습니다.";
+	public String delete(Long id, QnaModifyRequestDTO qnaModifyRequestDTO) {
+		Post qna = postRepository.findById(id).orElseThrow(() -> new QnaNotFoundException("존재하지 않는 게시글입니다."));
+		Optional<User> user = userRepository.findByUserId(qnaModifyRequestDTO.getId());
+		if (user.isPresent()) {
+			if(qna.getUser().equals(user.get())) {
+				postRepository.delete(qna);
+				return "게시글이 삭제되었습니다.";
+			} else {
+				throw new InvalidLoginException("로그인 후 이용해주세요.");
+			}
+		} else {
+			throw new InvalidLoginException("로그인 후 이용해주세요.");
+		}
+
+
 	}
 
 }
