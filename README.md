@@ -255,9 +255,6 @@ KnowGet
 
 <br/>
 
-## 📦 CI / CD 아키텍쳐
-![IMG_0004](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/2551783e-8931-4612-8d04-db3aadf5baf9)
-
 ## :globe_with_meridians: ERD
 ![ERD](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/eabf7700-9951-4cfd-b16e-eb8dc076e981)
 
@@ -280,3 +277,328 @@ KnowGet
 <br/>
 <br/>
 
+## 📦 CI / CD 아키텍쳐
+![IMG_0004](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/2551783e-8931-4612-8d04-db3aadf5baf9)
+
+## BackEnd
+
+## Dockerfile
+
+```
+FROM openjdk:17-alpine
+
+# jar파일을 만들고
+ARG JAR_FILE=build/libs/*.jar
+
+# jar파일을 copy, jar는 자바의 실행 파일
+COPY ${JAR_FILE} backend.jar
+
+# jar파일 실행할 때 사용
+ENTRYPOINT ["java","-jar","/backend.jar"]
+```
+
+<br/>
+
+## docker-compose.yaml
+
+```
+# backend, mariadb
+
+version: "3"
+
+services:
+  # springboot
+  # - 배열 형식
+  app:
+    container_name: chicken_knowget_backend
+    build: .
+    image: wardkey/chicken_knowget_backend:latest
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://database:3306/knowget?useUnicode=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+    # 서버 실행하다 문제 생기면 다시 시작
+    restart: always
+    links:
+      - database
+    #    platform: linux/arm64 맥 호환성 추가
+
+  # mariadb
+  database:
+    image: mariadb:10.6.16
+    container_name: chicken_knowgetdb
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+#      MARIADB_USER: root
+#      MARIADB_PASSWORD: root
+      MARIADB_DATABASE: knowget
+
+    # port를 변경하고 application.yaml에서도 포트 번호를 맞춤
+    ports:
+      - "6033:3306"
+
+    volumes:
+      - ./src/main/resources/database/initdb.d/:/docker-entrypoint-initdb.d/
+```
+
+</br>
+
+## 1-schema.sql
+
+```
+# create schema knowget collate utf8mb4_general_ci;
+
+# create database knowget;
+
+use knowget;
+
+create table users
+(
+    user_idx  bigint auto_increment
+        primary key,
+    delete_yn bit default b'0' null,
+    email     varchar(255)     not null,
+    id        varchar(255)     not null,
+    name      varchar(255)     not null,
+    password  varchar(255)     not null,
+    phone     varchar(255)     null,
+    constraint UK_6dotkott2kjsp8vw4d0m25fb7
+        unique (email),
+    constraint UK_6jvqtxgs6xvh0h0t261hurgqo
+        unique (id),
+    constraint UK_du5v5sr43g5bfnji4vb8hg5s3
+        unique (phone)
+);
+
+create table post
+(
+    post_idx      bigint auto_increment
+        primary key,
+    written_time  datetime(6)  null,
+    modified_time datetime(6)  null,
+    content       text         not null,
+    title         varchar(255) not null,
+    type          varchar(255) not null,
+    user_idx      bigint       not null,
+    constraint FKgbu4s4d7g7gjqw2uks2krksoo
+        foreign key (user_idx) references knowget.users (user_idx)
+);
+
+create table comment
+(
+    comment_idx   bigint auto_increment
+        primary key,
+    written_time  datetime(6) null,
+    modified_time datetime(6) null,
+    content       text        not null,
+    post_idx      bigint      not null,
+    user_idx      bigint      not null,
+    constraint FK4x0ed95d7btd26400uea2d7gt
+        foreign key (post_idx) references knowget.post (post_idx),
+    constraint FKayd6ry9svpxpvotcd7oxg5l7j
+        foreign key (user_idx) references knowget.users (user_idx)
+);
+```
+
+</br>
+
+## 2-data.sql
+
+```
+INSERT INTO `users` ( `email`, `id`, `name`, `password`, `phone`) VALUES ( 'email@naver.com', 'ididid', 'name', '$2a$10$hbNEirOWcP4fVN16iDs.u.IR/NLv1PnJqVE8pF.gj33qrqPDHCbrq', '010-0000-0000');
+
+INSERT INTO `post` (`content`, `title`, `type`, `user_idx`) VALUES ( 'ㅁㄴㅇ', 'ㅁㄴㅇ', 'qna', 1);
+
+INSERT INTO `comment` (`content`, `post_idx`, `user_idx`) VALUES ('내용', 1, 1);
+```
+
+</br>
+
+## Pipeline Script
+
+```
+
+pipeline {
+
+	agent any
+
+	stages{
+
+		stage('Build') {
+			steps {
+            // git 연동
+			git branch : 'main',
+            credentialsId : 'githubtoken',
+			url : 'https://github.com/WARDKEY/chicken_knowget_backend.git'
+			bat './gradlew.bat build bootJAR'
+			}
+		}
+		
+ 		stage('Jar Clean') {
+ 			steps {
+ 				bat './gradlew.bat clean bootJAR'
+ 			}
+ 	    }
+
+		// Docker image 빌드
+        stage('Build Dokcer Image') {
+            steps {
+                script {
+                    docker.build('wardkey/chicken_knowget_backend')    
+                }
+                
+            }
+        }
+        
+        // Docker Hub 로그인
+        stage('Push to Dokcer Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockertoken') {
+                        docker.image('wardkey/chicken_knowget_backend').push()
+                    }    
+                }
+                
+            }
+        }
+        
+        // Docker Compose 설정
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    // docker compose 다운로드
+                    // 실행 파일 다운로드
+                    bat "curl -L https://github.com/docker/compose/releases/download/2.24.6/docker-compose-Linux-x86_64 -o docker-compose"	
+                    // docker compose 설치
+                    bat "icacls docker-compose /grant user:RX"
+                    // docker compose up
+                    bat ".\\docker-compose build"
+                    bat ".\\docker-compose up -d"
+                    
+                }
+            }
+        }
+    }
+}
+```
+
+## FrontEnd
+
+## Dockerfile
+
+```
+# 베이스 이미지
+FROM node:20.12.2
+
+# 클라우드 환경에서 디렉토리를 의미
+WORKDIR /front-vue
+
+# 현재 디렉토리에 있는 모든 파일을 WORKDIR로 이동
+COPY . .
+
+# 필요한 의존관계 라이브러리를 설치하는 명령어
+RUN npm install
+RUN npm i axios
+RUN npm install vuex@next --save
+
+
+# 포트번호 노출
+EXPOSE 8081
+
+# 스크립트 실행 명령어(하나의 도커파일은 하나의 CMD만 가짐, 배열 형식으로 지정)
+CMD ["npm", "run", "serve"]
+```
+
+</br>
+
+## Pipeline Script
+
+```
+
+pipeline {
+
+	agent any
+
+    environment{
+        GIT_HUB_CREDENTIALS = credentials('githubtoken')
+        DOCKER_HUB_CREDENTIALS = credentials('dockertoken')
+        DOCKER_IMAGE_NAME = 'wardkey/chicken_knowget_frontend'
+        DOCKER_IMAGE_TAG = '1.0'
+    }
+    
+    
+
+	stages{
+
+		stage('Build') {
+			steps {
+            // git 연동\
+			git branch : 'main',
+			credentialsId : "${GIT_HUB_CREDENTIALS}",
+			url : 'https://github.com/WARDKEY/chicken_knowget_frontend.git'
+			}
+		}
+		
+		// 필요한 파일 다운로드
+		stage('Install Dependency') {  
+		    steps {
+		        bat 'npm install'
+		    }
+		}
+		
+	
+				
+		// 배포환경에서 사용할 파일 빌드
+        stage('Npm Build') {
+            steps {
+                bat 'npm run build'
+            }
+        }
+		
+		// Docker image 빌드
+        stage('Build Docker Image') {
+		    steps {
+		        script {    
+		            docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f Dockerfile .")
+		        }
+		    }
+		}
+		
+		// Docker hub에 push
+		stage('Push to Dokcer-Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockertoken') {
+                        docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
+                    }    
+                }
+                
+            }
+        }
+        
+        stage('Run Container') {
+            steps {
+                script {
+                    
+                    // 이전에 실행되고 있는 컨테이너 제거
+                    bat "docker ps -a"
+                    bat "docker stop chicken_knowget_frontend || exit 0"
+                    bat "docker rm chicken_knowget_frontend || exit 0"    
+                    
+                    
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockertoken') {
+                        docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").run('-d -p 8081:8081 --name chicken_knowget_frontend')
+                    }    
+                }
+                
+            }
+        }
+	}
+}
+```
