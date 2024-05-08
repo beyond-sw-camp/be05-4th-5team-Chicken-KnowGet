@@ -242,7 +242,7 @@ KnowGet
 
 <br/>
 
-## 📦 배포 PipeLine
+## 📦 CI / CD 아키텍쳐
 ![IMG_0004](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/2551783e-8931-4612-8d04-db3aadf5baf9)
 
 ## :globe_with_meridians: ERD
