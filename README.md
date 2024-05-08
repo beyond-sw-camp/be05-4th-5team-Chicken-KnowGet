@@ -44,6 +44,7 @@
 <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white">
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+<img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white">
 <br/> <br/>
 
 ## 팀 소개
@@ -52,8 +53,8 @@
     <tr>
       <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b>백지환</b></sub></a><br /></td>
       <td align="center"><a href=""><img src="" width="250px;" height="200px" alt=""/><br /><sub><b>서근엽</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b> 정민지 </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="250px;" h/><br /><sub><b>정유진</b></sub></a><br /></td></td>
+      <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b>정민지</b></sub></a><br /></td>
+      <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b>정유진</b></sub></a><br /></td>
     </tr>
   </tbody>
 </table>
@@ -63,6 +64,7 @@
 <br/>
 
 ## 📦 디렉토리 구조 ( FrontEnd / BackEnd  )
+
 1 ) FrontEnd 디렉토리 구조
 
 ```
@@ -240,23 +242,27 @@ KnowGet
 
 <br/>
 
+## 📦 시스템 아키텍쳐
+![IMG_0004](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/2551783e-8931-4612-8d04-db3aadf5baf9)
+
 ## ERD
 ![ERD](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/eabf7700-9951-4cfd-b16e-eb8dc076e981)
 
 ## WBS
 [ WBS ](https://docs.google.com/spreadsheets/d/1c2KiFvD5wSIaPKdhtbI_LOJN7vkrVptiZ7Lq6WQYQkA/edit#gid=1834290736)
 
-![WBS](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/900c1764-a736-41a2-a02e-9713288ca0d5)
-
+![WBS_KnowGet](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/c282f9f1-5366-4313-9225-fa426e9057be)
 
 ## 요구사항 명세서
 [ 요구사항 명세서 ](https://docs.google.com/spreadsheets/d/1c2KiFvD5wSIaPKdhtbI_LOJN7vkrVptiZ7Lq6WQYQkA/edit#gid=1834290736)
-![요구사항 명세서](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/1beb3a28-b466-4267-b69d-dbe1d85ade32)
 
+![요구사항 명세서_KnowGet](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/9002e2ee-02b4-4795-be4e-c59058564d18)
 
 ## API 명세서
 
 [ API 명세서 ](https://docs.google.com/spreadsheets/d/1c2KiFvD5wSIaPKdhtbI_LOJN7vkrVptiZ7Lq6WQYQkA/edit#gid=359725514)
+
+![API명세서_KnowGet](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/e7a80c59-46e4-4e80-ab93-d5831a6691ea)
 
 <br/>
 <br/>
