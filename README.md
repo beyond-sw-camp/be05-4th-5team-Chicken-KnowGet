@@ -12,13 +12,13 @@
 
 ## 🏡 프로젝트 소개
 
-1. 	:pushpin: 목적 : <br/> <br/>
+1. 목적 : <br/> <br/>
           "KnowGet"은 "Knowledge"와 "Get"이라는 두 단어를 결합한 합성어로, 지식을 얻는 과정을 즐겁고 손쉽게 만들어주는 웹 서비스이다.<br/>
           사용자들은 서로에게 질문을 하고 다양한 주제에 대해 답변을 제공함으로써 상호 소통하고 지식을 공유할 수 있다.<br/>
           이 웹서비스를 통해 사용자들은 다른 사람들의 경험과 지식을 공유하며 더욱 풍부한 정보를 얻을 수 있다.<br/>
           <br/> <br/>
           
-2. :globe_with_meridians: 구현 기능 : <br/> <br/>
+2. 구현 기능 : <br/> <br/>
    2 - 1) 회원 가입, 로그인 인증 <br/>
    2 - 2) Q&A 게시판 <br/>
    2 - 3) 댓글 <br/>
@@ -47,7 +47,7 @@
 <img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white">
 <br/> <br/>
 
-## 팀 소개
+## :bug: 팀 소개
 <table>
   <tbody>
     <tr>
@@ -65,7 +65,7 @@
 
 ## 📦 디렉토리 구조 ( FrontEnd / BackEnd  )
 
-1 ) 	:pushpin: FrontEnd 디렉토리 구조
+1 ) FrontEnd 디렉토리 구조
 
 ```
 knowget
@@ -101,7 +101,7 @@ knowget
 
 ```
 
-2 ) 	:pushpin: BackEnd 디렉토리 구조
+2 ) BackEnd 디렉토리 구조
 
 
 ```
@@ -245,20 +245,20 @@ KnowGet
 ## 📦 배포 PipeLine
 ![IMG_0004](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/2551783e-8931-4612-8d04-db3aadf5baf9)
 
-## :globe_with_meridians:	ERD
+## ERD
 ![ERD](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/eabf7700-9951-4cfd-b16e-eb8dc076e981)
 
-## :bookmark: WBS
+## WBS
 [ WBS ](https://docs.google.com/spreadsheets/d/1c2KiFvD5wSIaPKdhtbI_LOJN7vkrVptiZ7Lq6WQYQkA/edit#gid=1834290736)
 
 ![WBS_KnowGet](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/c282f9f1-5366-4313-9225-fa426e9057be)
 
-## :bulb: 요구사항 명세서
+## 요구사항 명세서
 [ 요구사항 명세서 ](https://docs.google.com/spreadsheets/d/1c2KiFvD5wSIaPKdhtbI_LOJN7vkrVptiZ7Lq6WQYQkA/edit#gid=1834290736)
 
 ![요구사항 명세서_KnowGet](https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/155809042/9002e2ee-02b4-4795-be4e-c59058564d18)
 
-## :memo: API 명세서
+## API 명세서
 
 [ API 명세서 ](https://docs.google.com/spreadsheets/d/1c2KiFvD5wSIaPKdhtbI_LOJN7vkrVptiZ7Lq6WQYQkA/edit#gid=359725514)
 
