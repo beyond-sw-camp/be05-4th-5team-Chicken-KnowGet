@@ -62,10 +62,12 @@
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b>백지환</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="250px;" height="200px" alt=""/><br /><sub><b>서근엽</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b>정민지</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="250px;" height="200px;" alt=""/><br /><sub><b>정유진</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/JihwanB"><img src="https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/93907076/c4905936-8bb2-4241-a8db-870dafea5246"
+ width="200px;" height="200px;" alt=""/><br /><sub><b>백지환</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/WARDKEY"><img src="https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/93907076/a113a005-4b55-4edc-b96d-ae61e2da53eb"
+ width="200px;" height="200px" alt=""/><br /><sub><b>서근엽</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/mjjung2"><img src="https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/93907076/2db0b40b-2e5f-460b-9dd6-cfb34042e15b" width="200px;" height="200px;" alt=""/><br /><sub><b>정민지</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/eujin99"><img src="https://github.com/beyond-sw-camp/be05-4th-5team-Chicken-KnowGet/assets/93907076/9cbcfff6-3848-4b29-9ced-3cb3ee70fcbc" width="200px;" height="200px;" alt=""/><br /><sub><b>정유진</b></sub></a><br /></td>
     </tr>
   </tbody>
 </table>
