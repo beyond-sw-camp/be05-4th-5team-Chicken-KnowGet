@@ -27,11 +27,11 @@ public class Comment extends BaseTime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idx;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "post_idx", nullable = false)
 	private Post post;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_idx", nullable = false)
 	private User user;
 
@@ -42,6 +42,10 @@ public class Comment extends BaseTime {
 	public Comment(Post post, User user, String content) {
 		this.post = post;
 		this.user = user;
+		this.content = content;
+	}
+	
+	public void updateContent(String content) {
 		this.content = content;
 	}
 
