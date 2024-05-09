@@ -40,9 +40,9 @@ class KnowGetApplicationTests {
 		Post result = postRepository.save(post);
 
 		System.out.println(
-			"createTime = " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(result.getCreatedTime()));
+			"createTime = " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(result.getWrittenTime()));
 		System.out.println(
 			"modifiedTime = " + DateTimeFormatter.ofPattern("yyyy-MM-ss HH:mm:ss").format(result.getModifiedTime()));
 	}
-
+	
 }
